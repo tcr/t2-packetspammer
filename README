@@ -1,34 +1,47 @@
-Packetspammer
-Andy Green <andy@warmcat.com>
+## instructions
 
-Packetspammer sends unencrypted broadcast packets down a mac80211 wireless
-interface that should be set for Monitor mode.  It spams the packets down the
-interface as fast as it can, although you can specify a delay between packets.
+We need to answer 2 questions for FCC testing:
 
-At the same time it is listening for packets with a MAC of 13:22:33:44:xx:xx
-and will display metadata about any incoming packets (like the bitrate) and
-the packet contents.  So if you run packetspammer on two nearby machines, they
-will show each other's packets like this:
+1. At what dB is the wifi transmitting at? I believe this is in the boot logs where it says 0dB... Might also be useful checking the v0 core's FCC docs and seeing what dB they are at.
 
-RX: Rate: 54.0Mbps, Freq: 2.417GHz, Ant: 0, Flags: 10
-0000: 50 61 63 6B 65 74 73 70 61 6D 6D 65 72 20 2D 2D  Packetspammer --
-0010: 62 72 6F 61 64 63 61 73 74 20 70 61 63 6B 65 74  broadcast packet
-0020: 23 34 37 39 31 36 20 2D 2D 20 3A 2D 44 20 2D 2D  #47916 -- :-D --
-0030: 75 6C 74 72 61 63 61 74 2E 68 6F 6D 65 2E 77 61  ultracat.home.wa
-0040: 72 6D 63 61 74 2E 63 6F 6D                       rmcat.com
+2. We need to be able to send a constant stream of pins on a certain wifi channel. Task items for this are:
+    * Be able to set the channel. Apparently this is doable from AP mode 
 
+ http://wiki.openwrt.org/doc/uci/wireless
+ 
+    * Force it to send packets from AP mode
+ 
+ https://wireless.wiki.kernel.org/en/users/documentation/packetspammer
+ 
+    * Packet spammer also listens, so it might be a good way to test that the spam is working with two tessels (`iwconfig wlan0 channel 2`). Or listen for the packets on a specific channel using a mac
+    * A PR on CLI so that this can be done by one of Seeed's test engineers. Proposal is to look something like this `tessel wifi --spam --channel 2`
 
-Typical usage:
+---
 
-  echo -n mon0 > /sys/class/ieee80211/phy0/add_iface
-  iwconfig mon0 mode monitor
-  ifconfig mon0 up
-  packetspammer mon0
+### DB info
 
-You may need to bring up your normal interface first and set its channel, eg
+https://apps.fcc.gov/eas/GetApplicationAttachment.html?id=2384207#page=11
 
-ifconfig wlan0 up
-iwconfig wlan0 channel 2
+also see:
 
-If you normal interface is associated to an AP on a particular channel, that's
-fine, the packet injection won't disturb the association.
+https://fcc.io/2AC4R/VOCOREV1
+https://apps.fcc.gov/oetcf/eas/reports/ViewExhibitReport.cfm?mode=Exhibits&RequestTimeout=500&calledFromFrame=Y&application_id=b9dhlPxi0SUQuGuoIs%2Fh2A%3D%3D&fcc_id=2AC4RVOCOREV1
+
+### steps for packetspammer
+
+clone https://github.com/tcr/t2-packetspammer
+
+unpack https://github.com/tcr/t2-packetspammer/releases/download/binaries/binaries.tar.gz into ~/.tessel/binaries
+
+run t2-compiler populate --target=t2 (this should NOT build, only populate from the binaries folder) or t2-compile populate --target=vm if you're doing VM dev
+
+```
+cd t2-packetspammer
+t2 run index.js
+```
+
+see index.js for further modifications
+
+## license
+
+gpl
