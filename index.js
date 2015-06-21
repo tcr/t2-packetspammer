@@ -1,0 +1,18 @@
+var fs = require('fs');
+var execSync = require('child_process').execSync;
+
+console.log(execSync('echo starting').toString());
+// console.log(execSync('uci set system.@system[0].hostname=test_ap').toString());
+// console.log(execSync('uci set network.lan.ipaddr=192.168.1.1').toString());
+// console.log(execSync('uci set wireless.@wifi-iface[0].mode=ap').toString());
+// console.log(execSync('uci set wireless.@wifi-iface[0].ssid=OpenWrt').toString());
+// console.log(execSync('uci set wireless.@wifi-iface[0].encryption=none').toString());
+// console.log(execSync('uci set wireless.@wifi-iface[0].wds=1').toString());
+// console.log(execSync('uci set wireless.radio0.disabled=0').toString());
+// console.log(execSync('uci set wireless.radio0.macaddr=').toString());
+// console.log(execSync('uci set wireless.radio0.phy=phy0').toString());
+console.log(execSync('uci commit').toString());
+
+var main = require('bindings')('packetspammer').hello;
+
+var exitcode = main('packetspammer');

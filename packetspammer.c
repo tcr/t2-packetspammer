@@ -157,7 +157,7 @@ usage(void)
 
 
 int
-main(int argc, char *argv[])
+program_main(int argc, char *argv[])
 {
 	u8 u8aSendBuffer[500];
 	char szErrbuf[PCAP_ERRBUF_SIZE];

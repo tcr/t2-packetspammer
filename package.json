@@ -1,0 +1,25 @@
+{
+  "name": "packetspammer",
+  "version": "1.0.0",
+  "description": "Packetspammer Andy Green <andy@warmcat.com>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "node-gyp rebuild"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://git.warmcat.com/packetspammer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "GPL",
+  "gypfile": true,
+  "dependencies": {
+    "bindings": "^1.2.1",
+    "nan": "^1.8.4"
+  },
+  "include_dirs": [
+    "<!(node -e \"require('nan')\")"
+  ]
+}
